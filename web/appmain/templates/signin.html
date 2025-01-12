@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <title>Signin</title>
+</head>
+<body>
+    <div class="contaniner">
+        <div class="row navbar bg-light align-items-center">
+            <div class="col-6">
+                <a class="nav-link" href="/home"><h4>pyBook</h4></a>
+            </div>
+            <div class="col-6">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" id="signup_link" href="/signup">회원가입</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signin_link" href="/signin">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signout_link" href="/signout">로그아웃</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="myinfo_link" href="/mypage">내 정보</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <form>
+                    <div>
+                        <label for="email_input" class="form-label">이메일</label>
+                        <input type="text" class="form-control" id="email_input">
+                    </div>
+                    <div class="mt-3">
+                        <label for="password_input" class="form-label">패스워드</label>
+                        <input type="password" class="form-control" id="password_input">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+<div class="row justify-content-center mt-3">
+    <div class="col-4 text-center">
+        <button type="button" class="btn btn-primary" id="submit_button">제출</button>
+        <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="static/js/navbar.js"></script>
+<script>
+    const email = document.querySelector('#email_input');
+    const passwd = document.querySelector('#password_input');
+
+    function onSubmitHandler() {
+        let formData = new FormData();
+
+        formData.set("email", email.value);
+        formData.set("passwd", passwd.value);
+
+        fetch('api/user/signin', {
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            window.sessionStorage.setItem("authtoken", resBody["authtoken"]);
+            window.sessionStorage.setItem("username", resBody["username"]);
+            let url ='/home';
+            window.location.replace(url);
+        }).catch((error) => {
+            console.log('[Error]Signin:'. error);
+        });
+    }
+
+    let submitButton = document.querySelector('#submit_button');
+    submitButton.addEventListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        let url = '/home';
+        window.location.replace(url);
+    }
+
+    let cancelButton = document.querySelector('#cancel_button');
+    cancelButton.addEventListener('click', onCancelHandler);
+</script>
+</html>
