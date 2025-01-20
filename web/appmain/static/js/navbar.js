@@ -1,4 +1,4 @@
-<!-- 처음 메뉴바 -->
+<!-- 메뉴바 -->
 const signup = document.querySelector('#signup_link');
 const signin = document.querySelector('#signin_link');
 const signout = document.querySelector('#signout_link');

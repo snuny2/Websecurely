@@ -1,5 +1,3 @@
-import secrets
-
 from flask import Blueprint, send_from_directory, make_response, request, jsonify
 import sqlite3
 import bcrypt
