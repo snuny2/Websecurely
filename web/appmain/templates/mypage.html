@@ -40,6 +40,32 @@
 </body>
 <script type="text/javascript" src="/static/js/navbar.js"></script>
 <script>
-    
+    const username = document.querySelector('#username_input');
+    const passwd = document.querySelector('#password_input');
+    const confirmPasswd = document.querySelector('#password_confirm');
+
+    function fillUserData() {
+        let headerData = new Headers();
+
+        let authToken = sessionStorage.getItem("authtoken");
+        if (authToken) {
+            headerData.set("authtoken", authToken);
+        }
+
+        fetch('/api/user/myinfo', {
+            method: 'POST',
+            headers: headerData,
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            username.value = resBody["username"];
+        }).catch((error) => {
+            console.log('[Error]fillUserData:', error);
+        });
+    }
+
+    window.addEventListener('load', fillUserData);
+
+    function checkPw() {}
 </script>
 </html>
