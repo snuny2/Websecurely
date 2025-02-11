@@ -1,5 +1,3 @@
-from zoneinfo import reset_tzpath
-
 import jwt
 import sqlite3
 
@@ -32,7 +30,7 @@ def verifyJWT(token):
             return None
 
 def getJWTContent(token):
-    isVerified = cerifyJwT(token)
+    isVerified = verifyJWT(token)
 
     if isVerified:
         return jwt.decode(token, app.config['SECRET_KEY'], algorithms=['HS256'])

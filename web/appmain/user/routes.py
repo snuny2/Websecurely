@@ -5,6 +5,7 @@ import secrets
 import jwt
 
 from appmain import app
+from appmain.utils import verifyJWT
 
 user = Blueprint('user', __name__)
 
@@ -15,6 +16,10 @@ def signUp():
 @user.route('/signin')
 def signIn():
     return send_from_directory(app.root_path, 'templates/signin.html')
+
+@user.route('/myinfo')
+def myPage():
+    return send_from_directory(app.root_path, 'templates/mypage.html')
 
 @user.route('/api/user/signup', methods=['POST'])
 def register():
@@ -90,5 +95,34 @@ def getAuth():
 
             cursor.close()
         conn.close()
+
+        return make_response(jsonify(payload), 200)
+
+@user.route('/api/user/myinfo', methods=['POST'])
+def getMyInfo():
+    headerData = request.headers
+
+    authToken = headerData.get("authtoken")
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT(authToken)
+
+        if isValid:
+            token = getJWTContent(authToken)
+            email = token['email']
+
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
+                SQL = 'select username from users where email = ?'
+                cursor.execute(SQL, (email,))
+                username = cursor.fetchone()[0]
+                cursor.close()
+            conn.close()
+
+            payload = {"success": True, "username": username}
 
         return make_response(jsonify(payload), 200)
