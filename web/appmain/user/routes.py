@@ -5,7 +5,7 @@ import secrets
 import jwt
 
 from appmain import app
-from appmain.utils import verifyJWT
+from appmain.utils import verifyJWT, getJWTContent
 
 user = Blueprint('user', __name__)
 
@@ -126,3 +126,49 @@ def getMyInfo():
             payload = {"success": True, "username": username}
 
         return make_response(jsonify(payload), 200)
+
+@user.route('/api/user/update', methods=['POST'])
+def updatreMyinfo():
+
+    headerDate = request.headers
+    data = request.form
+
+    authToken = headerDate.get('authtoken')
+    username = data.get("username")
+    passwd = data.get("passwd")
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT(authToken)
+
+        if isValid:
+            token = getJWTContent(authToken)
+            email = token['email']
+
+            hashedPW = bcrypt.hashpw(passwd.encode('utf-8'), bcrypt.gensalt())
+
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
+                if passwd:
+                    SQL = 'update users set username = ?, passwd = ? where email = ?'
+                    cursor.execute(SQL, (username, hashedPW, email))
+                else:
+                    SQL = 'update users set username = ? where email = ?'
+                    cursor.execute(SQL, (username, email))
+                conn.commit()
+
+                # SQL = 'select * from users'
+                # cursor.execute(SQL)
+                # rows = cursor.fetchall()
+                # for row in rows:
+                # print(row)
+
+                cursor.close()
+            conn.close()
+    else:
+        pass
+
+    return make_response(jsonify(payload), 200)
