@@ -1,0 +1,52 @@
+<!doctype html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <title>Reset PW</title>
+</head>
+<body>
+    <div class="container">
+        <div class="row navbar bg-light align-items-center">
+            <div class="col-6">
+                <a class="nav-link" href="/home"><h4>pyBook</h4></a>
+            </div>
+            <div class="col-6">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" id="signup_link" href="/signup">회원가입</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signin_link" href="/signin">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signout_link" href="/signout">로그아웃</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="myinfo_link" href="/myinfo">내 정보</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-5 text-center">
+                <div>입력하신 메일 주소로 이메일을 보내드립니다.</div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-4 text-center">
+                <form>
+                    <div>
+                        <input type="text" class="form-control" id="email_input">
+                    </div>
+                </form>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-4 text-center text-danger" id="reset_passwd_email_message_div">&nbsp;</div>
+        </div>
+    </div>
+</body>
+</html>
