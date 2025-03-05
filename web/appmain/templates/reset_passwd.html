@@ -47,6 +47,52 @@
         <div class="row justify-content-center mt-2">
             <div class="col-4 text-center text-danger" id="reset_passwd_email_message_div">&nbsp;</div>
         </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-4 text-center">
+                <button type="button" class="btn btn-primary" id="submit_button">요청</button>
+                <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+            </div>
+        </div>
     </div>
 </body>
+<script type="text/javascript" src="/static/js/navbar.js"></script>
+<script>
+    const email=document.querySelector('#email_input');
+    const submitButton=document.querySelector('#submit_button');
+    const cancelButton=document.querySelector('#cancel_button');
+    const msg_div=document.querySelector('#reset_passwd_email_message_div');
+
+    function onSubmitHandler() {
+        let formData = new FormData();
+        formData.set("email", email.value);
+
+        fetch('/api/user/resetpw', {
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).them((resBody) => {
+            let success = resBody["success"]
+            if (success) {
+                let url = '/home';
+                window.location.replace(url);
+            }
+            else {
+                let message = resBody["message"];
+                msg_div.innerHTML = message;
+            }
+        }).catch((error) => {
+            console.log('[Error]reset_passwd:',error);
+        });
+    }
+
+    submitButton.addEnentListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        let url = '/home';
+        window.location.replace(url);
+    }
+
+    cancelButton.addEventListener('click', onCancelHandler);
+</script>
 </html>
