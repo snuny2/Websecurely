@@ -4,22 +4,32 @@ import bcrypt
 import secrets
 import jwt
 
-from appmain import app
+from appmain import app, mail
 from appmain.utils import verifyJWT, getJWTContent
+from flask_mail import Message
 
 user = Blueprint('user', __name__)
+
 
 @user.route('/signup')
 def signUp():
     return send_from_directory(app.root_path, 'templates/signup.html')
 
+
 @user.route('/signin')
 def signIn():
     return send_from_directory(app.root_path, 'templates/signin.html')
 
+
 @user.route('/myinfo')
 def myPage():
     return send_from_directory(app.root_path, 'templates/mypage.html')
+
+
+@user.route('/resetpw')
+def resetpw():
+    return send_from_directory(app.root_path, 'templates/reset_passwd.html')
+
 
 @user.route('/api/user/signup', methods=['POST'])
 def register():
@@ -50,6 +60,7 @@ def register():
 
     payload = {"success": True}
     return make_response(jsonify(payload), 200)
+
 
 @user.route('/api/user/signin', methods=['POST'])
 def getAuth():
@@ -86,10 +97,10 @@ def getAuth():
             conn.commit()
 
             token = jwt.encode({"id": id, "email": email, "username": username, "authkey": authkey},
-                                app.config["SECRET_KEY"], algorithm='HS256')
-            payload = {"authenticated": True, "email": email, "username": username,"authtoken": token}
+                               app.config["SECRET_KEY"], algorithm='HS256')
+            payload = {"authenticated": True, "email": email, "username": username, "authtoken": token}
 
-            #print('user.signin: %s' %email)
+            # print('user.signin: %s' %email)
         else:
             pass
 
@@ -97,6 +108,7 @@ def getAuth():
         conn.close()
 
         return make_response(jsonify(payload), 200)
+
 
 @user.route('/api/user/myinfo', methods=['POST'])
 def getMyInfo():
@@ -127,9 +139,9 @@ def getMyInfo():
 
         return make_response(jsonify(payload), 200)
 
+
 @user.route('/api/user/update', methods=['POST'])
 def updatreMyinfo():
-
     headerDate = request.headers
     data = request.form
 
@@ -172,3 +184,44 @@ def updatreMyinfo():
         pass
 
     return make_response(jsonify(payload), 200)
+
+
+@user.route('/api/user/resetpw', methods=['POST'])
+def checkAndSendNewPW():
+    data = request.form
+    email = data.get("email")
+
+    payload = {"success": False}
+
+    conn = sqlite3.connect('pyBook.db')
+    cursor = conn.cursor()
+
+    if cursor:
+        SQL = 'select id from users where email = ?'
+        cursor.execute(SQL, (email,))
+        result = cursor.fetchone()
+
+        if result:
+            id = secrets.token_hex(8)
+            hashedPW = bcrypt.hashpw(data['passwd'].encode('utf-8'), bcrypt.gensalt())
+
+            SQL = 'update users set passwd = ? where id = ?'
+            cursor.execute(SQL, (hashedPW, id))
+            conn.commit()
+
+            cursor.close()
+            conn.close()
+
+            msg = Message(subject='임시 비밀번호', sender='efzxcsh20@gmail.com', recipients=[email])
+            msg.body = '임시 비밀번호입니다.: ' + randPW
+
+            # print('checkAndSendNewPW.mag:', msg)
+            # mail.send(msg)
+
+            payload = {"success": True}
+        else:
+            payload = {"success": False, "message": '등록되어 있지 않은 이메일 입니다.'}
+    else:
+        pass
+
+        return make_response(jsonify(payload), 200)
