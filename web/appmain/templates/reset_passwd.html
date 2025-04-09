@@ -71,7 +71,7 @@
             body: formData
         }).then((response) => {
             return response.json();
-        }).them((resBody) => {
+        }).then((resBody) => {
             let success = resBody["success"]
             if (success) {
                 let url = '/home';
@@ -86,7 +86,7 @@
         });
     }
 
-    submitButton.addEnentListener('click', onSubmitHandler);
+    submitButton.addEventListener('click', onSubmitHandler);
 
     function onCancelHandler() {
         let url = '/home';

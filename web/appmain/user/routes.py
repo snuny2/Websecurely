@@ -188,6 +188,7 @@ def updatreMyinfo():
 
 @user.route('/api/user/resetpw', methods=['POST'])
 def checkAndSendNewPW():
+
     data = request.form
     email = data.get("email")
 
@@ -202,7 +203,8 @@ def checkAndSendNewPW():
         result = cursor.fetchone()
 
         if result:
-            id = secrets.token_hex(8)
+            id = result[0]
+            randPW = secrets.token_hex(8)
             hashedPW = bcrypt.hashpw(data['passwd'].encode('utf-8'), bcrypt.gensalt())
 
             SQL = 'update users set passwd = ? where id = ?'
