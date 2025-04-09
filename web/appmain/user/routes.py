@@ -205,7 +205,7 @@ def checkAndSendNewPW():
         if result:
             id = result[0]
             randPW = secrets.token_hex(8)
-            hashedPW = bcrypt.hashpw(data['passwd'].encode('utf-8'), bcrypt.gensalt())
+            hashedPW = bcrypt.hashpw(randPW.encode('utf-8'), bcrypt.gensalt())
 
             SQL = 'update users set passwd = ? where id = ?'
             cursor.execute(SQL, (hashedPW, id))
@@ -217,8 +217,8 @@ def checkAndSendNewPW():
             msg = Message(subject='임시 비밀번호', sender='efzxcsh20@gmail.com', recipients=[email])
             msg.body = '임시 비밀번호입니다.: ' + randPW
 
-            # print('checkAndSendNewPW.mag:', msg)
-            # mail.send(msg)
+            print('checkAndSendNewPW.mag:', msg)
+            mail.send(msg)
 
             payload = {"success": True}
         else:
@@ -226,4 +226,4 @@ def checkAndSendNewPW():
     else:
         pass
 
-        return make_response(jsonify(payload), 200)
+    return make_response(jsonify(payload), 200)
