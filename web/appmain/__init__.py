@@ -4,6 +4,7 @@ from flask import Flask
 from flask_mail import Mail
 from dotenv import load_dotenv
 
+load_dotenv()
 app = Flask(__name__)
 
 app.config["SECRET_KEY"] = "f45e55e904ebe239ee03bb3f8582302c"
