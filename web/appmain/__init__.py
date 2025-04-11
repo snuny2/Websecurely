@@ -22,3 +22,6 @@ app.register_blueprint(main)
 
 from appmain.user.routes import user
 app.register_blueprint(user)
+
+from appmain.article.routes import article
+app.register_blueprint(article)

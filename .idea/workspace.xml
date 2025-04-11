@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="f6673fbf-7982-4cc8-93e1-edf37527101c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/__init__.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/pyBook.db" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/pyBook.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/static/js/navbar.js" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/static/js/navbar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/templates/create_article.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/templates/create_article.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/templates/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/utils.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/utils.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -16,6 +22,7 @@
     <option name="RECENT_TEMPLATES">
       <list>
         <option value="HTML File" />
+        <option value="Python Script" />
       </list>
     </option>
   </component>
@@ -58,7 +65,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.sourceCode.Python",
+    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -114,7 +121,8 @@
       <workItem from="1742636445047" duration="442000" />
       <workItem from="1743981322665" duration="971000" />
       <workItem from="1744086976149" duration="1879000" />
-      <workItem from="1744248759948" duration="5195000" />
+      <workItem from="1744248759948" duration="5439000" />
+      <workItem from="1744338439895" duration="5547000" />
     </task>
     <servers />
   </component>
@@ -122,6 +130,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Websecurely$run.coverage" NAME="run 커버리지 결과" MODIFIED="1744164461049" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/appmain" />
+    <SUITE FILE_PATH="coverage/Websecurely$run.coverage" NAME="run 커버리지 결과" MODIFIED="1744345789472" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/appmain" />
   </component>
 </project>

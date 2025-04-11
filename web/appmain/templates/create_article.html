@@ -68,5 +68,83 @@
         </div>
     </div>
 </body>
-<script></script>
+<script type="text/javascript" sec="/static/js/navbar.js"></script>
+<script>
+    let category = document.querySelector('#prod_category')
+    let title = document.querySelector('#title_input')
+    let picture = document.querySelector('#pic_input')
+    let desc = document.querySelector('#desc_input')
+    let price = document.querySelector('#price_input')
+
+    let title_msg = document.querySelector('#title_input_msg')
+    let price_msg = document.querySelector('#price_input_msg')
+
+    function checkTitleAndPrice() {
+        let isTitleValid = title.value.length > 0 && title.value.length <= 25;
+
+        if(!isTitleValid) {
+            title_msg.innerHTML = '제목을 1 ~ 25 길이로 입력해 주세요.';
+        }
+        else {
+            title_msg.innerHTML = ' ';
+        }
+
+        let isPriceValid = price.value > 0 && price.value < 100000;
+
+        if(!isPriceValid) {
+            price_msg.innerHTML = '가격을 0 ~ 10,000 원 사이로 입력해주세요.';
+        }
+        else {
+            price_msg.innerHTML = ' ';
+        }
+
+        return isTitleValid && isPriceValid
+    }
+
+    // 제목과 가격의 조건이 참인지 확인
+    function onSubmitHandler() {
+        let isTitleAndPriceValid = checkTitleAndPrice();
+
+        if(isTitleAndPriceValid === true) {
+            let headerData = new Handers();
+            let authToken = sessionStorage.getItem("authtoken");
+
+            if(authToken) {
+                headerData.set("authtoken", authToken);
+            }
+
+            let formData = new FormData();
+
+            formData.set("category", category.value);
+            formData.set("title", title.value);
+            formData.set("picture", picture.files[0]);
+            formData.set("desc", desc.value);
+            formData.set("price", price.value);
+
+            fetch('/api/article/create', {
+                method: 'POST',
+                headers: headerData,
+                body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((resBody) => {
+                console.log('create_article.inSubmitHandler.success:', resBody["success"]);
+                console.log('create_article.inSubmitHandler.articleNo:', resBody["articleNo"]);
+                window.locatiom.replace('/home');
+            }).catch((error) => {
+                console.log('[Error]create_article.onSubmitHandler:', error);
+            });
+        }
+    }
+
+    let submitButton = document.querySelector('#submit_button');
+    submitButton.addEventListener('click', onSubmitHandler);
+
+    function onCancelHandler() {
+        history.back();
+    }
+
+    let cancelButton = document.querySelector('#cancel_button');
+    cancelButton.addEventListener('click', onCancelHandler);
+</script>
 </html>
