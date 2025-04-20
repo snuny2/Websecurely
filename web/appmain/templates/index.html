@@ -33,10 +33,66 @@
         </div>
     </div>
     <div class="contents mt-5">
-        <div class="row">
-            <div class="col" style="text-align: center">contents</div>
+        <div class="row justify-content-center">
+            <div class="col-5 mt-5">
+                <div class="input-group">
+                    <input type="text" class="form-control" id="search_input" \
+                           placeholder="상품 이름을 입력해주세요." aria-describedby="search_buuton">
+                    <button class=" btn btn-outline-secondary" id="search=button" type="button">상품찾기</button>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-5">
+            <div class="col-10"><hr></div>
+        </div>
+        <div class="row justify-content-center mt-3">
+            <div class="col-8" id="recent_articles_div"></div>
         </div>
     </div>
 </body>
 <script type="text/javascript" src="/static/js/navbar.js"></script>
+<script>
+    const recentArticlesDiv = document.querySelector('#recent_articles_div');
+
+    function displayRecentArticles(articles) {
+        articles.forEach((article) => {
+            let articleNo = article["articleNo"];
+            let title = article["title"];
+            let desc = article["desc"];
+
+            let cardDiv = document.createElement('div');
+            cardDiv.className = 'card mt-2';
+
+            let articleElement = `
+                <h5 class="card-header">
+                    <a class="link-primary text-decoration-none" href="/display_article/${articleNo}">
+                        ${title}
+                    </a>
+                </h5>
+                <p class="card-text text-truncate px-3 py-2">
+                    <a class="link-secondary text-decoration-none" href="/display_article/${articleNo}">
+                        ${desc}
+                    </a>
+                </p>
+            `;
+
+            cardDiv.innerHTML = articleElement;
+            recentArticlesDiv.appendChild(cardDiv);
+        });
+    }
+
+    window.addEventListener('load', getRecentArticles);
+
+    function getRecentArticles() {
+        fetch('/api/article/recent', {
+            method: 'GET'
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            displayRecentArticles(resBody["articles"]);
+        }).catch((error) => {
+            eonsole.log('[Error]getRecentArticles():', error);
+        });
+    }
+</script>
 </html>
