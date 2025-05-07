@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/bootstrap.min.css">
-    <title>Create Article</title>
+    <title>Update Article</title>
 </head>
 <body>
 <div class="container">
@@ -24,6 +24,9 @@
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" id="mypage_link" href="/myinfo">내 정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="create_article_link" href="create_article">상품등록</a>
                 </li>
             </ul>
         </div>
@@ -48,8 +51,14 @@
                     <label for="title_input" class="form-label mt-3">*제목</label>
                     <input type="text" class="form-control" id="title_input">
                     <div class="text-danger mt-1" id="title_input_msg">&nbsp;</div>
-                    <label for="pic_input" class="form-label mt-3">사진</label>
-                    <input type="file" class="form-control" id="pic_input">
+                    <div class="row justify-content-center mt-3" id="article_image_section">
+                        <div class="col-3" style="text-align-last: center">
+                            <figure class="figure" id="article_image_fig">
+                            </figure>
+                        </div>
+                        <label for="pic_input" class="form-label mt-3">사진</label>
+                        <input type="file" class="form-control" id="pic_input">
+                    </div>
                     <label for="desc_input" class="form-label mt-3">설명</label>
                     <textarea type="text" class="form-control" id="desc_input" rows="4">
                     </textarea>
@@ -60,24 +69,30 @@
             </form>
         </div>
     </div>
-</div>
-<div class="row justify-content-center mt-4">
-    <div class="col-4 text-center">
-        <button type="button" class="btn btn-primary" id="submit_button">제출</button>
-        <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+    <div class="row justify-content-center mt-4">
+        <div class="col-4 text-center">
+            <button type="button" class="btn btn-primary" id="submit_button">제출</button>
+            <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+        </div>
     </div>
 </div>
 </body>
-<script type="text/javascript" sec="/static/js/navbar.js"></script>
+<script type="text/javascript" src="/static/js/navbar.js"></script>
 <script>
-    let category = document.querySelector('#prod_category')
-    let title = document.querySelector('#title_input')
-    let picture = document.querySelector('#pic_input')
-    let desc = document.querySelector('#desc_input')
-    let price = document.querySelector('#price_input')
+    const category = document.querySelector('#prod_category')
+    const title = document.querySelector('#title_input')
+    const pictureFig = document.querySelector('#article_image_fig')
+    const picture = document.querySelector('#pic_input')
+    const desc = document.querySelector('#desc_input')
+    const price = document.querySelector('#price_input')
 
-    let title_msg = document.querySelector('#title_input_msg')
-    let price_msg = document.querySelector('#price_input_msg')
+    const title_msg = document.querySelector('#title_input_msg')
+    const price_msg = document.querySelector('#price_input_msg')
+
+    const submitButton = document.querySelector('#submit_button')
+    const cancelButton = document.querySelector('#cancel_button')
+
+    window.addEventListener('load', getArticleData);
 
     function checkTitleAndPrice() {
         let isTitleValid = title.value.length > 0 && title.value.length <= 25;
@@ -99,11 +114,72 @@
         return isTitleValid && isPriceValid
     }
 
+    function getArticleNo() {
+        const location = window.location.href;
+        const url = new URL(location);
+        const articleNo = url.pathname.split('/')[2];
+
+        return articleNo;
+    }
+
+    function setArticleData(articleData) {
+        const categorySet = {"인문": 0, "사회과학": 1, "자연과학": 2, "의학": 3, "경재/경영": 4, "공학": 5, "음악": 6, "미술": 7, "기타": 8};
+        const categoryCode = articleData["category"];
+        const categoryValue = categorySet[categoryCode];
+        category.options[categoryValue].selected = true;
+
+        title.value = articleData["title"];
+        desc.value = articleData["description"];
+        price.value = articleData["price"];
+
+        let image = document.createElement('img');
+        image.src = articleData["picture"];
+        image.className = 'figure-img img-fluid rounded';
+        pictureFig.appendChild(image);
+    }
+
+    function getArticleData() {
+        const articleNo = getArticleNo();
+
+        let formData = new FormData();
+        formData.set("articleNo", articleNo);
+
+        fetch('/api/article/display', {
+            method: 'POST',
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            setArticleData(resBody["article"]);
+        }).catch((error) => {
+            console.log('[Error]UpdateArticle.getArticleData():', error);
+        });
+    }
+
+    function onChangePicFileInput() {
+        let picFile = picture.files[0];
+
+        if (picFile) {
+            let reader = new FileReader();
+
+            reader.addEventListener("load", function() {
+                const image = document.querySelector('#article_image_fig > img')
+                image.src = reader.result;
+            });
+
+            reader.readAsDataURL(picFile);
+        }
+    }
+
+    picture.addEventListener('change', onChangePicFileInput);
+
     // 제목과 가격의 조건이 참인지 확인
     function onSubmitHandler() {
         let isTitleAndPriceValid = checkTitleAndPrice();
 
         if (isTitleAndPriceValid === true) {
+            const articleNo = getArticleNo();
+
             let headerData = new Handers();
             let authToken = sessionStorage.getItem("authtoken");
 
@@ -113,6 +189,7 @@
 
             let formData = new FormData();
 
+            formData.set("articleNo", articleNo);
             formData.set("category", category.value);
             formData.set("title", title.value);
             formData.set("picture", picture.files[0]);
@@ -126,23 +203,20 @@
             }).then((response) => {
                 return response.json();
             }).then((resBody) => {
-                console.log('create_article.inSubmitHandler.success:', resBody["success"]);
-                console.log('create_article.inSubmitHandler.articleNo:', resBody["articleNo"]);
-                window.locatiom.replace('/home');
+                const articleNo = ewsBody["articleNo"]
+                let url = '/dissplay_article/' + articleNo;
+                window.location.replace(url);
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
         }
     }
 
-    let submitButton = document.querySelector('#submit_button');
-    submitButton.addEventListener('click', onSubmitHandler);
-
     function onCancelHandler() {
         history.back();
     }
 
-    let cancelButton = document.querySelector('#cancel_button');
+    submitButton.addEventListener('click', onSubmitHandler);
     cancelButton.addEventListener('click', onCancelHandler);
 </script>
 </html>

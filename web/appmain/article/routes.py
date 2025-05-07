@@ -101,7 +101,7 @@ def getRecentArticles():
                 return make_response(jsonify(payload), 200)
 
 @article.route('/display_article/<int:articleNo>', methods=['GET']) #상품번호로 접속해주는 코드
-def displayArticle(articleNo):
+def displayArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/display_article.html')
 
 def translateCategory(catId):
@@ -163,3 +163,7 @@ def displayArticle():
         payload = {"success": True, "articles": None}
 
         return make_response(jsonify(payload), 200)
+
+@article.route('/update_article/<int:articleNo>', methods=['GET'])
+def updateArticlePage(articleNo):
+    return send_from_directory(app.root_path, 'templates/update_article.html')
