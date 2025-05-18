@@ -1,5 +1,5 @@
 from flask import Blueprint, send_from_directory, make_response, jsonify, request, url_for
-import sqlite3
+import sqlite3, os
 
 from appmain import app
 
@@ -167,3 +167,119 @@ def displayArticle():
 @article.route('/update_article/<int:articleNo>', methods=['GET'])
 def updateArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/update_article.html')
+
+@article.roite('/api/article/update', methods=['POST'])
+def updateArticle():
+    headerData = request.headers
+    data = request.form
+    files = request.files
+
+    authToken = headerData.get('authToken')
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT("authToken")
+
+        if isValid:
+            token = getJWTContent(authToken)
+            username = token["username"]
+
+            artucleNo = data.get("articleNo")
+            category = data.get("category")
+            title = data.get("title")
+            desc = data.get("desc")
+            price = data.get("price")
+
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
+                SQL = 'select author from articles where articleNo = ?'
+                cursor.execute(SQL, (artucleNo,))
+                result = cursor.fetchone()
+                cursor.close()
+            conn.close()
+
+            if (result[0] == username):
+                if files:
+                    conn = sqlite3.connect('pyBook.db')
+                    cursor = conn.cursor()
+
+                    if cursor:
+                        SQL = 'select picture from articles where articleNo = ?'
+                        cursor.execute(SQL, (artucleNo,))
+                        result = cursor.fetchone()
+
+                        if result:
+                            oldPicFileName = result[0]
+                            oldPicFilePath = os.path.join(app.root_path, 'pics', username, oldPicFileName)
+
+                            if os.path.isfile(oldPicFileName):
+                                os.remove(oldPicFilePath)
+
+                        newPicFileName = savePic(files["picture"], username)
+
+                        SQL = 'update articles set category = ?, title = ?, description = ?, picture = ?, price = ? where articleNo = ?'
+                        cursor.execute(SQL, (category, title, desc, price, artucleNo))
+                        conn.commit()
+
+                        # SQL = 'select * from articles'
+                        # cursor.execute(SQL)
+                        # rows =cursor.fetchall()
+                        # for row in rows:
+                        # print(row)
+
+                        cursor.close()
+                    conn.close()
+
+                    payload = {"success": True, "articleNo": artucleNo}
+                else: # if files
+                    conn = sqlite3.connect('pyBook.db')
+                    cursor = conn.cursor()
+
+                    if cursor:
+                        SQL = 'update articles set category = ?, title = ?, description = ?, price = ? where articleNo = ?'
+                        cursor.execute(SQL, (category, title, desc, price, artucleNo))
+                        conn.commit()
+
+                        # SQL = 'select * from articles'
+                        # cursor.execute(SQL)
+                        # rows = cursor.fetchall()
+                        # for row in rows:
+                        # print(row)
+
+                        cursor.close()
+                    conn.close()
+                    payload = {"success": True, "articleNo": artucleNo}
+            else: # if (result[0] == username)
+                pass
+        else: # if isValid
+            pass
+    else: # if authToken
+        pass
+
+    return make_response(jsonify(payload), 200)
+
+@article.route('/api/article/delete', methods=['POST'])
+def deleteArticle():
+    headerData = request.headers
+    data = request.form
+
+    authToken = headerData.get("authToken")
+
+    payload = {"success": False}
+
+    if authToken:
+        isValid = verifyJWT(authToken)
+
+        if isValid:
+            token = getJWTContent(authToken)
+            username = token["username"]
+
+            articleNo = data.get("articleNo")
+
+            conn = sqlite3.connect('pyBook.db')
+            cursor = conn.cursor()
+
+            if cursor:
