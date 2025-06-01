@@ -104,7 +104,7 @@
         let isTitleAndPriceValid = checkTitleAndPrice();
 
         if (isTitleAndPriceValid === true) {
-            let headerData = new Handers();
+            let headerData = new Headers();
             let authToken = sessionStorage.getItem("authtoken");
 
             if (authToken) {

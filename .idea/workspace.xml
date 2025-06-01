@@ -7,6 +7,10 @@
     <list default="true" id="f6673fbf-7982-4cc8-93e1-edf37527101c" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/web/appmain/article/routes.py" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/article/routes.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/pyBook.db" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/pyBook.db" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/templates/create_article.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/templates/create_article.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/templates/display_article.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/templates/display_article.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/web/appmain/templates/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/web/appmain/templates/index.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -125,6 +129,7 @@
       <workItem from="1746526647601" duration="1599000" />
       <workItem from="1746611689353" duration="4421000" />
       <workItem from="1747548639180" duration="2640000" />
+      <workItem from="1748773827136" duration="2888000" />
     </task>
     <servers />
   </component>
@@ -132,6 +137,6 @@
     <option name="version" value="3" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/Websecurely$run.coverage" NAME="run 커버리지 결과" MODIFIED="1746621456488" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/appmain" />
+    <SUITE FILE_PATH="coverage/Websecurely$run.coverage" NAME="run 커버리지 결과" MODIFIED="1748775367618" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/web/appmain" />
   </component>
 </project>

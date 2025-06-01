@@ -96,9 +96,9 @@ def getRecentArticles():
             for article in result:
                 recentArticleDics.append({"articleNo": article[0], "title": article[2], "desc": article[4]})
 
-                payload = {"success": True, "articles": recentArticleDics}
+            payload = {"success": True, "articles": recentArticleDics}
 
-                return make_response(jsonify(payload), 200)
+        return make_response(jsonify(payload), 200)
 
 @article.route('/display_article/<int:articleNo>', methods=['GET']) #상품번호로 접속해주는 코드
 def displayArticlePage(articleNo):
@@ -168,7 +168,7 @@ def displayArticle():
 def updateArticlePage(articleNo):
     return send_from_directory(app.root_path, 'templates/update_article.html')
 
-@article.roite('/api/article/update', methods=['POST'])
+@article.route('/api/article/update', methods=['POST'])
 def updateArticle():
     headerData = request.headers
     data = request.form
@@ -283,3 +283,42 @@ def deleteArticle():
             cursor = conn.cursor()
 
             if cursor:
+                SQL = 'select author, picture from articles where articleNo = ?'
+                cursor.execute(SQL, (articleNo,))
+                result = cursor.fetchone()
+                cursor.close()
+            conn.close()
+
+            if(result[0] == username):
+                conn = sqlite3.connect('pyBook.db')
+                cursor = conn.cursor()
+
+                picture = result[1]
+
+                if (picture):
+                    picFilePath = os.path.join(app.root_path, 'pics', username, picture)
+
+                    if os.path.isfile(picFilePath):
+                        os.remove(picFilePath)
+                    else:
+                        pass
+                else:
+                    pass
+
+                if cursor:
+                    SQL = 'delete from articles where articleNo = ?'
+                    cursor.execute(SQL, (articleNo,))
+                    conn.commit()
+                    cursor.close()
+                conn.close()
+
+                print('article deleted:&s' % articleNo)
+                payload = {"success": True}
+            else: # if (result[0] == username):
+                pass
+        else: # if isValid
+            pass
+    else: # if authToken:
+        pass
+
+    return make_response(jsonify(payload), 200)
