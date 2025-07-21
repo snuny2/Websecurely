@@ -15,7 +15,7 @@ function showAndHideNavbarMenu() {
     else {
         signout.style.display = "none";
         myinfo.style.display = "none";
-        createArticleLink.style.display = "none"
+        createArticleLink.style.display = "none";
     }
 }
 
