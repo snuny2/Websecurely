@@ -177,5 +177,66 @@
     window.addEventListener('load', displayReply);
     moreRepliesButton.addEventListener('click', displayReply);
 
+    function checkReplyHandler() {
+        const articleNo = getArticleNo();
+        let isReplyInputValid = checkReplyInput();
+
+        if (isReplyInputValid == true) {
+            let headerData = new Headers();
+            let authToken = seeionStorage.getItem("authtoken");
+            if (authToken) {
+                headerData.set("authtoken", authToken);
+            }
+
+            let formData = new FormData();
+
+            formData.set("articleNo", articleNo);
+            formData.set("reply", replyInput.value);
+
+            fetch('/api/reply/leave', {
+                method: 'POST',
+                headers: headerData,
+                body: formData
+            }).then((response) => {
+                return response.json();
+            }).then((resBody) => {
+                let replyRow = document.createElement('div');
+                replyRow.className = 'row justify-content-center mt-2';
+                replyRow.id = `reply_row-${resBody["replyNo"]}`
+
+                replyContent = `
+                <div class="col-1">
+                </div>
+                <div class="col-6">
+                    <div class="row">
+                        <div class="col-2">
+                            ${resBody["author"]}
+                        </div>
+                        <div class="col-7">
+                            #{resBody["desc"]}
+                        </div>
+                    <div>
+                </div>
+                <div class="col-2" class="delete_reply_button_div">
+                    <button type="button" class="btn btn-secondary btn-sm" data-replyn="${resBody["replyNo"]}">삭제</button>
+                </div>`
+
+                replyRow.innerHTML = replyContent;
+
+                let deleteButton = replyRow.querySelector('button');
+                deleteButton.addEventListener('click', onDeleteReplyHandler);
+
+                displatReplyDiv,inserBefore(replyRow, displayReplyDiv.firstChild);
+
+                replyInput.value = '';
+                baseIndex = baseIndex + 1;
+            }).catch((error) => {
+                console.log('[Error]create_article.onSubmitHandler:', error);
+            });
+        }
+    }
+
+    leaveReplyButton.addEventListener('click', onLeaveReplyHandler);
+
 </script>
 </html>
