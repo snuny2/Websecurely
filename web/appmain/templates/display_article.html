@@ -178,6 +178,10 @@
     moreRepliesButton.addEventListener('click', displayReply);
 
     function checkReplyHandler() {
+        return replyInput.value.length > 0;
+    }
+
+    function onLeaveReplyHandler() {
         const articleNo = getArticleNo();
         let isReplyInputValid = checkReplyInput();
 
@@ -238,5 +242,37 @@
 
     leaveReplyButton.addEventListener('click', onLeaveReplyHandler);
 
+    function onDeleteReplyHabdler(event) {
+        const replyNo = event.currentTarget.dataset.replyno;
+
+        let headerData = new Headers();
+        const authToken = sessionStoraget.getItem("authtoken");
+        if (authToken) {
+            headerData.set("authtoken", authToken);
+        }
+
+        let formData = new FormData();
+
+        formData.set("replyNo", replyNo);
+
+        fetch('/api/reply/delete', {
+            method: 'POST',
+            headers: headerData,
+            body: formData
+        }).then((response) => {
+            return response.json();
+        }).then((resBody) => {
+            if (resBody["success"] === true) {
+                console.log('onDeleteReplyAHandler():', replyNo);
+
+                const targetReplyRowId = `#reply_row-${replyNo}`;
+                const targetReplyRow = document.querySelector(targetReplyRowId);
+                targetReplyRow.remove();
+                vaseIndes = baseIndes - 1;
+            }
+        }).catch((error) => {
+            console.log('[Error]onDeleteReplyHandler():', error);
+        });
+    }
 </script>
 </html>
