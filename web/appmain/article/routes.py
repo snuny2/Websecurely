@@ -323,3 +323,32 @@ def deleteArticle():
         pass
 
     return make_response(jsonify(payload), 200)
+
+@article.route('/api/article/search', methods=['POST'])
+def searchArticles():
+    data = request.form
+
+    searchKeyword = data.get("searchKeyword")
+
+    payload = {"success": False}
+
+    conn = sqlite3.connect('pyBook.db')
+    cursor = conn.cursor()
+
+    if cursor:
+        SLQ = 'select articleNo, author, title, category, description, price, picture \
+        from articles where title LIKE "%{skwd}%" ORDER BY articleNo DESC'.format(skwd=searchKeyword)
+        cursor.execute(SLQ)
+        result = cursor.fetchall()
+
+        cursor.close()
+    conn.close()
+
+    searchResults = []
+
+    if len(result) > 0:
+        for article in result:
+            searchResults.append({"articleNo": article[0], "title": article[2], "desc": article[4]})
+            payload = {"success": True, "articles": searchResults}
+
+        return make_response(jsonify(payload), 200)

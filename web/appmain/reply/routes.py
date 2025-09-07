@@ -1,10 +1,12 @@
-from flask import Blueprint, make_response, jsonify, request
+from flask import make_response, jsonify, request, Blueprint
 
-import sqlite3, os
+import sqlite3
 
-from appmain import app, reply
+from appmain import  reply
 
 from appmain.utils import verifyJWT, getJWTContent, savePic
+
+reply = Blueprint('reply', __name__)
 
 @reply.route('/api/reply/leave', methods=['POST'])
 def leaveReply():
@@ -54,7 +56,7 @@ def leaveReply():
 @reply.route('/api/reply/get', methods=['POST'])
 def getReply():
     data = request.form
-    articleNo = data["artucleNo"]
+    articleNo = data["articleNo"]
     baseIndex = data["baseIndex"]
     numReplyRead = data["numReplyRead"]
 
@@ -69,7 +71,7 @@ def getReply():
             order by repltNo DESC limit ?,?'
             cursor.execute(SQL, (articleNo, baseIndex, numReplyRead))
             result = cursor.fetchone()
-            SQL = 'selcet conut(*) from replies where targetArticle = ?'
+            SQL = 'select conut(*) from replies where targetArticle = ?'
             cursor.execute(SQL, (articleNo,))
             numTotalReply = cursor.fetchone()[0]
 
@@ -118,7 +120,7 @@ def deleteReply():
             payload = {"success": True}
         else: # if isValid:
             pass
-    else: #if authTken:
+    else: #if authToken:
         pass
 
     return make_response(jsonify(payload), 200)
