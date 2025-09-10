@@ -89,17 +89,17 @@ def getRecentArticles():
         result = cursor.fetchall()
 
         cursor.close()
-        conn.close()
+    conn.close()
 
-        recentArticleDics = []
+    recentArticleDics = []
 
-        if len(result) > 0:
-            for article in result:
-                recentArticleDics.append({"articleNo": article[0], "title": article[2], "desc": article[4]})
+    if len(result) > 0:
+        for article in result:
+            recentArticleDics.append({"articleNo": article[0], "title": article[2], "desc": article[4]})
 
-            payload = {"success": True, "articles": recentArticleDics}
+        payload = {"success": True, "articles": recentArticleDics}
 
-        return make_response(jsonify(payload), 200)
+    return make_response(jsonify(payload), 200)
 
 @article.route('/display_article/<int:articleNo>', methods=['GET']) #상품번호로 접속해주는 코드
 def displayArticlePage(articleNo):

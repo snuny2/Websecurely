@@ -1,74 +1,77 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../static/css/bootstrap.min.css">
     <title>Create Article</title>
 </head>
 <body>
-<div class="container">
-    <div class="row navbar bg-light align-items-center">
-        <div class="col-6">
-            <a class="nav-link" href="/home"><h4>pyBook</h4></a>
-        </div>
-        <div class="col-6">
-            <ul class="nav justify-content-end">
-                <li class="nav-item">
-                    <a class="nav-link" id="signup_link" href="/signup">회원가입</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="signin_link" href="/signin">로그인</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="signout_link" href="/signout">로그아웃</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" id="mypage_link" href="/myinfo">내 정보</a>
-                </li>
-            </ul>
-        </div>
-    </div>
-</div>
-<div class="container mt-5">
-    <div class="row justify-content-center">
-        <div class="col-6">
-            <form>
-                <div>
-                    <select class="form-select" id="prod_category">
-                        <option value="0">인문</option>
-                        <option value="1">사회과학</option>
-                        <option value="2">자연과학</option>
-                        <option value="3">의학</option>
-                        <option value="4">경제/경영</option>
-                        <option value="5">공학</option>
-                        <option value="6">음악</option>
-                        <option value="7">미술</option>
-                        <option value="8">기타</option>
-                    </select>
-                    <label for="title_input" class="form-label mt-3">*제목</label>
-                    <input type="text" class="form-control" id="title_input">
-                    <div class="text-danger mt-1" id="title_input_msg">&nbsp;</div>
-                    <label for="pic_input" class="form-label mt-3">사진</label>
-                    <input type="file" class="form-control" id="pic_input">
-                    <label for="desc_input" class="form-label mt-3">설명</label>
-                    <textarea type="text" class="form-control" id="desc_input" rows="4">
-                    </textarea>
-                    <label for="price_input" class="form-label mt-3">*가격</label>
-                    <input type="text" class="form-control" id="price_input">
-                    <div class="text-danger mt-1" id="price_input_msg">&nbsp;</div>
-                </div>
-            </form>
+    <div class="container">
+        <div class="row navbar bg-light align-items-center">
+            <div class="col-6">
+                <a class="nav-link" href="/home"><h4>pyBook</h4></a>
+            </div>
+            <div class="col-6">
+                <ul class="nav justify-content-end">
+                    <li class="nav-item">
+                        <a class="nav-link" id="signup_link" href="/signup">회원가입</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signin_link" href="/signin">로그인</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="signout_link" href="/signout">로그아웃</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="myinfo_link" href="/myinfo">내 정보</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" id="create_article_link" href="/create_article">상품등록</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </div>
-</div>
-<div class="row justify-content-center mt-4">
-    <div class="col-4 text-center">
-        <button type="button" class="btn btn-primary" id="submit_button">제출</button>
-        <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-6">
+                <form>
+                    <div>
+                        <select class="form-select" id="prod_category">
+                            <option value="0">인문</option>
+                            <option value="1">사회과학</option>
+                            <option value="2">자연과학</option>
+                            <option value="3">의학</option>
+                            <option value="4">경제/경영</option>
+                            <option value="5">공학</option>
+                            <option value="6">음악</option>
+                            <option value="7">미술</option>
+                            <option value="8">기타</option>
+                        </select>
+                        <label for="title_input" class="form-label mt-3">*제목</label>
+                        <input type="text" class="form-control" id="title_input">
+                        <div class="text-danger mt-1" id="title_input_msg">&nbsp;</div>
+                        <label for="pic_input" class="form-label mt-3">사진</label>
+                        <input type="file" class="form-control" id="pic_input">
+                        <label for="desc_input" class="form-label mt-3">설명</label>
+                        <textarea type="text" class="form-control" id="desc_input" rows="4">
+                        </textarea>
+                        <label for="price_input" class="form-label mt-3">*가격</label>
+                        <input type="text" class="form-control" id="price_input">
+                        <div class="text-danger mt-1" id="price_input_msg">&nbsp;</div>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
-</div>
+    <div class="row justify-content-center mt-4">
+        <div class="col-4 text-center">
+            <button type="button" class="btn btn-primary" id="submit_button">제출</button>
+            <button type="button" class="btn btn-secondary" id="cancel_button">취소</button>
+        </div>
+    </div>
 </body>
-<script type="text/javascript" sec="/static/js/navbar.js"></script>
+<script type="text/javascript" sec="../static/js/navbar.js"></script>
 <script>
     let category = document.querySelector('#prod_category')
     let title = document.querySelector('#title_input')
@@ -128,7 +131,7 @@
             }).then((resBody) => {
                 console.log('create_article.inSubmitHandler.success:', resBody["success"]);
                 console.log('create_article.inSubmitHandler.articleNo:', resBody["articleNo"]);
-                window.locatiom.replace('/home');
+                window.location.replace('/home');
             }).catch((error) => {
                 console.log('[Error]create_article.onSubmitHandler:', error);
             });
